@@ -26,18 +26,21 @@
     <main>
         <section id="todo-list">
             <h1>ToDo List</h1>
-            <div id="new-task">
-                <input type="text">
-                <button id="new-task"><img src="" alt="Add" class="add-img"></button>
+            <div id="new-task-container">
+                <input type="text" id="task-input" placeholder="New Task">
+                <button id="new-task" clicked ><img src="" alt="Add" class="add-img"></button>
             </div>
-            <div class="task">
-                <p>Task</p>
-                <button id="edit"><img src="" alt="Edit"></button>
-                <button id="add"><img src="" alt="Add" class="add-img "></button>
-                <button id="delete"><img src="" alt="Delete"></button>
-            </div>
+            <ul id="task-list">
+            </ul>
+        </section>
+        <section id="complated-tasks">
+            <h1>complated tasks</h1>
+            <div>
+                <p id="complated-tasks">completed</p>
+                <button></button><button></button><button></button></div>
         </section>
     </main>
+    <script src="main.js"></script>
 </body>
 
 </html>
