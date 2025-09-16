@@ -1,9 +1,10 @@
 const addNewTask = document.getElementById("new-task");
 const TaskContainer = document.getElementById("task-list");
+const inputTask = document.getElementById("task-input");
 
 //  Add New Task
 //-----------------------------------------------------
-addNewTask.addEventListener("click", () => {
+function AddNewTask() {
   const task = document.createElement("li");
   let message = document.getElementById("task-input").value;
   task.classList.add("task");
@@ -93,24 +94,26 @@ addNewTask.addEventListener("click", () => {
     task.remove();
     const completedTask = document.createElement("li");
     completedTask.classList.add("task-completed");
-    completedTasksList.appendChild(completedTask);
     completedTask.innerHTML = `
     <p class="task-name">${message}</p>
-    <button class="delete-complated-task"><img src="" alt="Delete"></button>
+    <button class="delete-completed-task"><img src="" alt="Delete"></button>
     <button class="bring-back"><img src="" alt="Bring Back"></button>`;
-
-    const deleteCompleted = document.querySelector(".delete-complated-task");
-    const bringBack = document.querySelector(".bring-back");
+    completedTasksList.appendChild(completedTask);  
+    
+    const deleteCompleted = completedTask.querySelector(".delete-completed-task");
+    const bringBack = completedTask.querySelector(".bring-back");
 
     bringBack.addEventListener("click", () => {
       completedTask.remove();
       TaskContainer.appendChild(task);
-      task.appendChild(task.innerHTML)
-      
+      task.appendChild(task.innerHTML)      
     });
 
     deleteCompleted.addEventListener("click", () => {
       completedTask.remove();
     });
   });
-});
+} 
+
+addNewTask.addEventListener("click", () => {AddNewTask();})
+inputTask.addEventListener("keypress", (e) => {if (e.key === "Enter") AddNewTask();})
