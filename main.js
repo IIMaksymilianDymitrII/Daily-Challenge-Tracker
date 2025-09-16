@@ -6,14 +6,18 @@ const inputTask = document.getElementById("task-input");
 //-----------------------------------------------------
 function AddNewTask() {
   const task = document.createElement("li");
-  let message = document.getElementById("task-input").value;
   task.classList.add("task");
+  let message = document.getElementById("task-input").value;
 
   task.innerHTML = `
   <p class="task-name">${message}</p>
-  <button class="edit"><img src="" alt="Edit"></button>
-  <button class="delete"><img src="" alt="Delete"></button>
-  <button class="complete"><img src="" alt="Complete"></button>`;
+  <nav class="task-nav-buttons">
+    <button class="edit"><p>✍️️</p></button>
+    <button class="delete"><p>🗑️</p></button>
+    <button class="complete"><p>✅</p></button>
+  </nav>
+  `;
+
   const completeTaskBtn = task.querySelector(".complete");
   const editTaskBtn = task.querySelector(".edit");
   const deleteTaskBtn = task.querySelector(".delete");
@@ -44,8 +48,11 @@ function AddNewTask() {
 
     task.innerHTML = `
     <input type="text" class="edit-input">
-    <button id="accept-changes"><img src="" alt="Accept"></button>
-    <button id="deny-changes"><img src="" alt="Deny"></button>`;
+    <nav class="edit-nav-buttons">
+    <button id="accept-changes"><p>✅</p></button>
+    <button id="deny-changes"><p>❎</p></button>
+    </nav>
+    `;
 
     const editInput = document.querySelector(".edit-input");
     const acceptChangesBtn = document.querySelector("#accept-changes");
@@ -94,10 +101,14 @@ function AddNewTask() {
     task.remove();
     const completedTask = document.createElement("li");
     completedTask.classList.add("task-completed");
+    
     completedTask.innerHTML = `
     <p class="task-name">${message}</p>
-    <button class="delete-completed-task"><img src="" alt="Delete"></button>
-    <button class="bring-back"><img src="" alt="Bring Back"></button>`;
+    <nav class="completed-nav-buttons">
+      <button class="delete-completed-task"><p>🗑️</p></button>
+      <button class="bring-back"><p>🔙</p></button>
+    </nav>
+    `;
     completedTasksList.appendChild(completedTask);  
     
     const deleteCompleted = completedTask.querySelector(".delete-completed-task");
