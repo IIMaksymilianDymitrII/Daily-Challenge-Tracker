@@ -90,3 +90,32 @@ nav{
     border-radius: 25px;
     padding: 5px 25px;
 }
+
+.task-completed{
+    display: flex;
+    flex-direction: row;
+    gap: 20px;
+    flex-wrap: nowrap;
+    list-style: none;
+    background-color: rebeccapurple;
+    border-radius: 25px;
+    padding: 5px 25px;
+}
+
+#complated-task-list{
+ display: flex;
+ justtify-content:center ;
+ align-items: center;   
+}
+
+#complated-list{
+    display: flex;
+    flex-direction: column;
+    border-radius: 25px;
+    margin-top: 50px;
+    padding: 20px 0px;
+    align-items: center;
+    justify-content: center;
+    border: 3px solid #000 ;
+    background-color: #D8C99B;
+}
