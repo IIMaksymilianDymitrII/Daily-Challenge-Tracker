@@ -63,12 +63,13 @@ function AddNewTask() {
       acceptChangesBtn.remove();
       denyChangesBtn.remove();
       const newMessage = document.createElement("p");
+      const editNav = document.querySelector(".edit-nav-buttons")
       newMessage.classList.add("task-name");
       newMessage.textContent = editInput.value;
       task.prepend(newMessage);
-      task.appendChild(editTaskBtn);
-      task.appendChild(deleteTaskBtn);
-      task.appendChild(completeTaskBtn);
+      editNav.appendChild(editTaskBtn);
+      editNav.appendChild(deleteTaskBtn);
+      editNav.appendChild(completeTaskBtn);
       message = editInput.value;
     }
 
@@ -96,7 +97,7 @@ function AddNewTask() {
   });
   //  Complete Task
   //-----------------------------------------------------
-  const completedTasksList = document.querySelector(".completed-tasks-list");
+  const completedTasksList = document.querySelector("#completed-tasks-list");
   completeTaskBtn.addEventListener("click", () => {
     task.remove();
     const completedTask = document.createElement("li");
@@ -117,7 +118,7 @@ function AddNewTask() {
     bringBack.addEventListener("click", () => {
       completedTask.remove();
       TaskContainer.appendChild(task);
-      task.appendChild(task.innerHTML)      
+      task.appendChild(task.innerHTML);      
     });
 
     deleteCompleted.addEventListener("click", () => {
