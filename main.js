@@ -1,6 +1,6 @@
 const addNewTask = document.getElementById("new-task");
 const TaskContainer = document.getElementById("task-list");
-const inputTask = document.getElementById("task-input");
+let inputTask = document.getElementById("task-input");
 
 //  Add New Task
 //-----------------------------------------------------
@@ -10,26 +10,39 @@ function AddNewTask() {
   let message = document.getElementById("task-input").value;
 
   // Local Storage
-  // dosen't work don't know why 
-  
+  // dosen't work don't know why
+
   /*
   const getTasks = () => JSON.parse(localStorage.getItem(TASKS_KEY)) || [];
   const saveTasks = (tasks) => localStorage.setItem(TASKS_KEY, JSON.stringify(tasks))
   */
- 
-  task.innerHTML = `
-  <p class="task-name">${message}</p>
-  <nav class="task-nav-buttons">
-    <button class="edit"><p>✍️️</p></button>
-    <button class="delete"><p>🗑️</p></button>
-    <button class="complete"><p>✅</p></button>
-  </nav>
-  `;
 
-  const taskElements = [task.querySelector(".task-name"),
-     task.querySelector(".edit"), 
-     task.querySelector(".delete"), 
-     task.querySelector(".complete")];
+  let taskElementInnerHTML = {
+    task:`
+    <p class="task-name">${message}</p>
+    <nav class="task-nav-buttons">
+      <button class="edit"><p>✍️️</p></button>
+      <button class="delete"><p>🗑️</p></button>
+      <button class="complete"><p>✅</p></button>
+    </nav>
+    `,
+    edit:`
+    <input type="text" class="task-input">
+    <nav class="task-nav-buttons">
+      <button id="accept-changes"><p>✅</p></button>
+      <button id="deny-changes"><p>❎</p></button>
+    </nav>
+  `};
+
+  task.innerHTML = taskElementInnerHTML.task;
+
+  const taskElements = {
+    name: task.querySelector(".task-name"),
+    edit: task.querySelector(".edit"),
+    del:task.querySelector(".delete"),
+    complete:task.querySelector(".complete"),
+    navBtns:task.querySelector(".task-nav-buttons"),
+  };
 
   if (message === "") return;
   else {
@@ -38,58 +51,52 @@ function AddNewTask() {
     inputMessage.value = "";
   }
 
-  //  Delete Task
-  //-----------------------------------------------------
-  taskElements[2].addEventListener("click", () => task.remove());
-
   //  Edit Task
   //-----------------------------------------------------
-
-  taskElements[1].addEventListener("click", () => {
-    taskElements.forEach(element => element.remove());
-    
-    task.innerHTML = `
-    <input type="text" class="edit-input" >
-    <nav class="task-nav-buttons">
-    <button id="accept-changes"><p>✅</p></button>
-    <button id="deny-changes"><p>❎</p></button>
-    </nav>
-    `;
-
-    const editTaskElement = [task.querySelector(".edit-input"),
-      task.querySelector("#accept-changes"),
-      task.querySelector("#deny-changes")];
-
-    function AcceptChanges() {
-      editTaskElement.forEach(element => element.remove());
+  const editTaskElement = {
+    input:task.querySelector(".task-input"),
+    navBtns:task.querySelector(".task-nav-buttons"),
+    accept:task.querySelector("#accept-changes"),
+    deny:task.querySelector("#deny-changes"),
+  };
+  
+  function AcceptChanges() {
+    if (editTaskElement.input.value === "") return;
+    editTaskElement.forEach((element) => element.remove());
+    message = editTaskElement.input.value;
+    task.innerHTML = taskElementInnerHTML.task;
       
-      taskElements.forEach(element => task.appendChild(element));
-      taskElements[0].textContent = editTaskElement[0].value;
-      message = editTaskElement[0].value;
-    }
+  };
 
-    function DenyChanges() {
-      editTaskElement.forEach(element => editTaskElement[element].remove());
-      taskElements.forEach(element => task.appendChild(taskElements[element]));
-    }
+  function DenyChanges() {
+    editTaskElement.forEach((element) => editTaskElement[element].remove());
+    taskElements.forEach((element) => task.appendChild(taskElements[element]));
+  };
 
-    editTaskElement[0].addEventListener("keypress", (e) => {
+  taskElements.edit.addEventListener("click", () => {
+    taskElements.forEach(element => {});
+    task.innerHTML = taskElementInnerHTML.edit;
+    editTaskElement.accept.addEventListener("keypress", (e) => {
       if (e.key === "Enter") AcceptChanges();
       else if (message === "") return;
     });
 
-    editTaskElement[1].addEventListener("click", () => AcceptChanges());
-    editTaskElement[2].addEventListener("click", () => DenyChanges());
+    editTaskElement.accept.addEventListener("click", () => AcceptChanges());
+    editTaskElement.deny.addEventListener("click", () => DenyChanges());
   });
+
+  //  Delete Task
+  //-----------------------------------------------------
+  taskElements.del.addEventListener("click", () => task.remove());
 
   //  Complete Task
   //-----------------------------------------------------
   const completedTasksList = document.querySelector("#completed-tasks-list");
-  taskElements[3].addEventListener("click", () => {
+  taskElements.complete.addEventListener("click", () => {
     task.remove();
     const completedTask = document.createElement("li");
     completedTask.classList.add("task-completed");
-    
+
     completedTask.innerHTML = `
     <p class="task-name">${message}</p>
     <nav class="completed-nav-buttons">
@@ -98,8 +105,8 @@ function AddNewTask() {
     </nav>
     `;
 
-    completedTasksList.appendChild(completedTask);  
-    
+    completedTasksList.appendChild(completedTask);
+
     const deleteCompleted = completedTask.querySelector(".delete-completed-task");
     const bringBack = completedTask.querySelector(".bring-back");
 
@@ -110,7 +117,7 @@ function AddNewTask() {
 
     deleteCompleted.addEventListener("click", () => completedTask.remove());
   });
-} 
+}
 
-addNewTask.addEventListener("click", () => {AddNewTask();})
-inputTask.addEventListener("keypress", (e) => {if (e.key === "Enter") AddNewTask();})
+addNewTask.addEventListener("click", () => {AddNewTask();});
+inputTask.addEventListener("keypress", (e) => {if (e.key === "Enter") AddNewTask();});
