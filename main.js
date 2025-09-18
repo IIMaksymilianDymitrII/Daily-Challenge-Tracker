@@ -9,6 +9,14 @@ function AddNewTask() {
   task.classList.add("task");
   let message = document.getElementById("task-input").value;
 
+  // Local Storage
+  // dosen't work don't know why 
+  
+  /*
+  const getTasks = () => JSON.parse(localStorage.getItem(TASKS_KEY)) || [];
+  const saveTasks = (tasks) => localStorage.setItem(TASKS_KEY, JSON.stringify(tasks))
+  */
+ 
   task.innerHTML = `
   <p class="task-name">${message}</p>
   <nav class="task-nav-buttons">
@@ -18,10 +26,10 @@ function AddNewTask() {
   </nav>
   `;
 
-  const completeTaskBtn = task.querySelector(".complete");
-  const editTaskBtn = task.querySelector(".edit");
-  const deleteTaskBtn = task.querySelector(".delete");
-  const taskName = task.querySelector(".task-name");
+  const taskElements = [task.querySelector(".task-name"),
+     task.querySelector(".edit"), 
+     task.querySelector(".delete"), 
+     task.querySelector(".complete")];
 
   if (message === "") return;
   else {
@@ -32,73 +40,52 @@ function AddNewTask() {
 
   //  Delete Task
   //-----------------------------------------------------
-
-  deleteTaskBtn.addEventListener("click", () => {
-    task.remove();
-  });
+  taskElements[2].addEventListener("click", () => task.remove());
 
   //  Edit Task
   //-----------------------------------------------------
 
-  editTaskBtn.addEventListener("click", () => {
-    taskName.remove();
-    editTaskBtn.remove();
-    deleteTaskBtn.remove();
-    completeTaskBtn.remove();
-
+  taskElements[1].addEventListener("click", () => {
+    taskElements.forEach(element => element.remove());
+    
     task.innerHTML = `
-    <input type="text" class="edit-input">
-    <nav class="edit-nav-buttons">
+    <input type="text" class="edit-input" >
+    <nav class="task-nav-buttons">
     <button id="accept-changes"><p>✅</p></button>
     <button id="deny-changes"><p>❎</p></button>
     </nav>
     `;
 
-    const editInput = document.querySelector(".edit-input");
-    const acceptChangesBtn = document.querySelector("#accept-changes");
-    const denyChangesBtn = document.querySelector("#deny-changes");
+    const editTaskElement = [task.querySelector(".edit-input"),
+      task.querySelector("#accept-changes"),
+      task.querySelector("#deny-changes")];
 
     function AcceptChanges() {
-      editInput.remove();
-      acceptChangesBtn.remove();
-      denyChangesBtn.remove();
-      const newMessage = document.createElement("p");
-      const editNav = document.querySelector(".edit-nav-buttons")
-      newMessage.classList.add("task-name");
-      newMessage.textContent = editInput.value;
-      task.prepend(newMessage);
-      editNav.appendChild(editTaskBtn);
-      editNav.appendChild(deleteTaskBtn);
-      editNav.appendChild(completeTaskBtn);
-      message = editInput.value;
+      editTaskElement.forEach(element => element.remove());
+      
+      taskElements.forEach(element => task.appendChild(element));
+      taskElements[0].textContent = editTaskElement[0].value;
+      message = editTaskElement[0].value;
     }
 
     function DenyChanges() {
-      editInput.remove();
-      acceptChangesBtn.remove();
-      denyChangesBtn.remove();
-      task.prepend(message);
-      task.appendChild(editTaskBtn);
-      task.appendChild(deleteTaskBtn);
-      task.appendChild(completeTaskBtn);
+      editTaskElement.forEach(element => editTaskElement[element].remove());
+      taskElements.forEach(element => task.appendChild(taskElements[element]));
     }
 
-    editInput.addEventListener("keypress", (e) => {
+    editTaskElement[0].addEventListener("keypress", (e) => {
       if (e.key === "Enter") AcceptChanges();
-      else if (editInput.value === "") return;
+      else if (message === "") return;
     });
 
-    acceptChangesBtn.addEventListener("click", () => {
-      AcceptChanges();
-    });
-    denyChangesBtn.addEventListener("click", () => {
-      DenyChanges();
-    });
+    editTaskElement[1].addEventListener("click", () => AcceptChanges());
+    editTaskElement[2].addEventListener("click", () => DenyChanges());
   });
+
   //  Complete Task
   //-----------------------------------------------------
   const completedTasksList = document.querySelector("#completed-tasks-list");
-  completeTaskBtn.addEventListener("click", () => {
+  taskElements[3].addEventListener("click", () => {
     task.remove();
     const completedTask = document.createElement("li");
     completedTask.classList.add("task-completed");
@@ -110,6 +97,7 @@ function AddNewTask() {
       <button class="bring-back"><p>🔙</p></button>
     </nav>
     `;
+
     completedTasksList.appendChild(completedTask);  
     
     const deleteCompleted = completedTask.querySelector(".delete-completed-task");
@@ -118,12 +106,9 @@ function AddNewTask() {
     bringBack.addEventListener("click", () => {
       completedTask.remove();
       TaskContainer.appendChild(task);
-      task.appendChild(task.innerHTML);      
     });
 
-    deleteCompleted.addEventListener("click", () => {
-      completedTask.remove();
-    });
+    deleteCompleted.addEventListener("click", () => completedTask.remove());
   });
 } 
 
