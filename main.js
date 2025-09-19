@@ -17,7 +17,7 @@ function AddNewTask() {
   const saveTasks = (tasks) => localStorage.setItem(TASKS_KEY, JSON.stringify(tasks))
   */
 
-  let taskElementInnerHTML = {
+  const taskElementInnerHTML = {
     task:`
     <p class="task-name">${message}</p>
     <nav class="task-nav-buttons">
@@ -27,12 +27,19 @@ function AddNewTask() {
     </nav>
     `,
     edit:`
-    <input type="text" class="task-input">
+    <input type="text" class="task-input" placeholder="Edit Task">
     <nav class="task-nav-buttons">
       <button id="accept-changes"><p>✅</p></button>
       <button id="deny-changes"><p>❎</p></button>
     </nav>
-  `};
+  `,
+  complete:` 
+  <p class="task-name">${message}</p>
+    <nav class="completed-nav-buttons">
+      <button class="delete-completed-task"><p>🗑️</p></button>
+      <button class="bring-back"><p>🔙</p></button>
+    </nav>
+    `};
 
   task.innerHTML = taskElementInnerHTML.task;
 
@@ -74,14 +81,17 @@ function AddNewTask() {
   };
 
   taskElements.edit.addEventListener("click", () => {
-    taskElements.forEach(element => {});
+    task.remove(task.children);
     task.innerHTML = taskElementInnerHTML.edit;
-    editTaskElement.accept.addEventListener("keypress", (e) => {
+
+    taskElements.edit.addEventListener("keypress", (e) => {
       if (e.key === "Enter") AcceptChanges();
       else if (message === "") return;
     });
 
     editTaskElement.accept.addEventListener("click", () => AcceptChanges());
+    editTaskElement.accept.addEventListener("keypress", (e) => { if(e.key === "Enter") AcceptChanges()});
+    
     editTaskElement.deny.addEventListener("click", () => DenyChanges());
   });
 
@@ -97,13 +107,7 @@ function AddNewTask() {
     const completedTask = document.createElement("li");
     completedTask.classList.add("task-completed");
 
-    completedTask.innerHTML = `
-    <p class="task-name">${message}</p>
-    <nav class="completed-nav-buttons">
-      <button class="delete-completed-task"><p>🗑️</p></button>
-      <button class="bring-back"><p>🔙</p></button>
-    </nav>
-    `;
+    completedTask.innerHTML = taskElementInnerHTML.complete;
 
     completedTasksList.appendChild(completedTask);
 
@@ -121,3 +125,25 @@ function AddNewTask() {
 
 addNewTask.addEventListener("click", () => {AddNewTask();});
 inputTask.addEventListener("keypress", (e) => {if (e.key === "Enter") AddNewTask();});
+
+// Light Dark Theme Button
+
+const lightDarkThemeBtn = document.querySelector("#light-dark-theme");
+const lightDarkThemeText = document.querySelector("#light-dark-text");
+let lightThemeON = true;
+
+lightDarkThemeBtn.addEventListener("click", () => {
+  if (lightThemeON){
+    lightThemeON = false;
+    lightDarkThemeText.textContent ="🌙";
+    document.body.style.backgroundColor = "#000";
+  }
+  else if (!lightThemeON){
+    lightThemeON = true;
+    lightDarkThemeText.textContent = "☀️";
+    document.body.style.backgroundColor = "#B88B4A";
+
+  }
+   
+})
+
